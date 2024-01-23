@@ -1,0 +1,9 @@
+Criação do Banco de Dados:
+
+1. Para subir o docker compose, acesse a pasta do projeto que contém do arquivo docker-compose.yaml e execute o comando:
+
+docker-compose up
+
+2. Para validar se o banco de dados foi carregado com sucesso, execute o comando:
+
+docker-compose ps
