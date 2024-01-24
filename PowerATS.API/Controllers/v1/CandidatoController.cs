@@ -12,12 +12,12 @@ namespace PowerATS.API.Controllers.v1
     [ApiController]
     public class CandidatoController : ControllerBase
     {
-        private readonly ICandidatoService _CandidatoService;
+        private readonly ICandidatoService _candidatoService;
         private readonly IMapper _mapper;
 
-        public CandidatoController(ICandidatoService CandidatoService, IMapper mapper)
+        public CandidatoController(ICandidatoService candidatoService, IMapper mapper)
         {
-            _CandidatoService = CandidatoService;
+            _candidatoService = candidatoService;
             _mapper = mapper;
         }
 
@@ -26,8 +26,12 @@ namespace PowerATS.API.Controllers.v1
         {
             try
             { 
-                var result = _mapper.Map<IEnumerable<CandidatoDto>>(await _CandidatoService.GetAllAsync());
-                return Ok(result);
+                var result = _mapper.Map<IEnumerable<CandidatoDto>>(await _candidatoService.GetAllAsync());
+                return Ok(new
+                {
+                    items = result,
+                    hasNext = false
+                });
             }
             catch (Exception ex)
             {
@@ -40,7 +44,7 @@ namespace PowerATS.API.Controllers.v1
         {
             try
             {
-                var result = _mapper.Map<CandidatoDto>(await _CandidatoService.GetByIdAsync(id));
+                var result = _mapper.Map<CandidatoDto>(await _candidatoService.GetByIdAsync(id));
                 return Ok(result);
             }
             catch (Exception ex)
@@ -55,7 +59,7 @@ namespace PowerATS.API.Controllers.v1
             try
             {
                 var entity = _mapper.Map<Candidato>(dto);
-                var result = await _CandidatoService.CreateAsync(entity);
+                var result = await _candidatoService.CreateAsync(entity);
                 return Ok(result);
             }
             catch (Exception ex)
@@ -64,14 +68,21 @@ namespace PowerATS.API.Controllers.v1
             }
         }
 
-        [HttpPut]
-        public async Task<IActionResult> UpdateAsync([FromBody] CandidatoDto dto)
+        [HttpPut("{id:Guid}")]
+        public async Task<IActionResult> UpdateAsync(Guid id, [FromBody] CandidatoDto dto)
         {
             try
             {
-                var entity = _mapper.Map<Candidato>(dto);
-                var result = await _CandidatoService.UpdateAsync(entity);
-                return Ok(result);
+                var exists = await _candidatoService.GetByIdAsync(id);
+
+                if (exists != null)
+                {
+                    var entity = _mapper.Map<Candidato>(dto);
+                    var result = await _candidatoService.UpdateAsync(entity);
+                    return Ok(result);
+                }
+                else
+                    return NotFound($"Item {id} não existe.");
             }
             catch (Exception ex)
             {
@@ -84,7 +95,7 @@ namespace PowerATS.API.Controllers.v1
         {
             try
             {
-                var result = await _CandidatoService.DeleteByIdAsync(id);
+                var result = await _candidatoService.DeleteByIdAsync(id);
                 return Ok(result);
             }
             catch (Exception ex)

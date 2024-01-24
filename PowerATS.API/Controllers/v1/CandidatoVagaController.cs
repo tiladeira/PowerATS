@@ -12,12 +12,12 @@ namespace PowerATS.API.Controllers.v1
     [ApiController]
     public class CandidatoVagaController : ControllerBase
     {
-        private readonly ICandidatoVagaService _CandidatoVagaService;
+        private readonly ICandidatoVagaService _candidatoVagaService;
         private readonly IMapper _mapper;
 
-        public CandidatoVagaController(ICandidatoVagaService CandidatoVagaService, IMapper mapper)
+        public CandidatoVagaController(ICandidatoVagaService candidatoVagaService, IMapper mapper)
         {
-            _CandidatoVagaService = CandidatoVagaService;
+            _candidatoVagaService = candidatoVagaService;
             _mapper = mapper;
         }
 
@@ -26,8 +26,12 @@ namespace PowerATS.API.Controllers.v1
         {
             try
             { 
-                var result = _mapper.Map<IEnumerable<CandidatoVagaDto>>(await _CandidatoVagaService.GetAllAsync());
-                return Ok(result);
+                var result = _mapper.Map<IEnumerable<CandidatoVagaDto>>(await _candidatoVagaService.GetAllAsync());
+                return Ok(new
+                {
+                    items = result,
+                    hasNext = false
+                });
             }
             catch (Exception ex)
             {
@@ -40,7 +44,7 @@ namespace PowerATS.API.Controllers.v1
         {
             try
             {
-                var result = _mapper.Map<CandidatoVagaDto>(await _CandidatoVagaService.GetByIdAsync(id));
+                var result = _mapper.Map<CandidatoVagaDto>(await _candidatoVagaService.GetByIdAsync(id));
                 return Ok(result);
             }
             catch (Exception ex)
@@ -55,7 +59,7 @@ namespace PowerATS.API.Controllers.v1
             try
             {
                 var entity = _mapper.Map<CandidatoVaga>(dto);
-                var result = await _CandidatoVagaService.CreateAsync(entity);
+                var result = await _candidatoVagaService.CreateAsync(entity);
                 return Ok(result);
             }
             catch (Exception ex)
@@ -64,14 +68,21 @@ namespace PowerATS.API.Controllers.v1
             }
         }
 
-        [HttpPut]
-        public async Task<IActionResult> UpdateAsync([FromBody] CandidatoVagaDto dto)
+        [HttpPut("{id:Guid}")]
+        public async Task<IActionResult> UpdateAsync(Guid id, [FromBody] CandidatoVagaDto dto)
         {
             try
             {
-                var entity = _mapper.Map<CandidatoVaga>(dto);
-                var result = await _CandidatoVagaService.UpdateAsync(entity);
-                return Ok(result);
+                var exists = await _candidatoVagaService.GetByIdAsync(id);
+
+                if (exists != null)
+                {
+                    var entity = _mapper.Map<CandidatoVaga>(dto);
+                    var result = await _candidatoVagaService.UpdateAsync(entity);
+                    return Ok(result);
+                }
+                else
+                    return NotFound($"Item {id} não existe.");
             }
             catch (Exception ex)
             {
@@ -84,7 +95,7 @@ namespace PowerATS.API.Controllers.v1
         {
             try
             {
-                var result = await _CandidatoVagaService.DeleteByIdAsync(id);
+                var result = await _candidatoVagaService.DeleteByIdAsync(id);
                 return Ok(result);
             }
             catch (Exception ex)

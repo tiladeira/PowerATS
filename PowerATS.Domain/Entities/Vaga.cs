@@ -13,8 +13,8 @@ namespace PowerATS.Domain.Entities
         public string Titulo { get; set; } = null!;
         public string Descricao { get; set; } = null!;
         public decimal Valor { get; set; }
-        public EnumTipoContratacao TipoContratacao { get; set; }
-        public bool Status { get; set; }
+        public EnumTipoContratacao? TipoContratacao { get; set; }
+        public bool? Status { get; set; }
 
         [ForeignKey("IdCandidato")]
         public virtual ICollection<CandidatoVaga> CandidatoVagas { get; set; } = new List<CandidatoVaga>();

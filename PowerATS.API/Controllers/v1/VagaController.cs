@@ -12,12 +12,12 @@ namespace PowerATS.API.Controllers.v1
     [ApiController]
     public class VagaController : ControllerBase
     {
-        private readonly IVagaService _VagaService;
+        private readonly IVagaService _vagaService;
         private readonly IMapper _mapper;
 
-        public VagaController(IVagaService VagaService, IMapper mapper)
+        public VagaController(IVagaService vagaService, IMapper mapper)
         {
-            _VagaService = VagaService;
+            _vagaService = vagaService;
             _mapper = mapper;
         }
 
@@ -25,9 +25,13 @@ namespace PowerATS.API.Controllers.v1
         public async Task<IActionResult> GetAllAsync()
         {
             try
-            { 
-                var result = _mapper.Map<IEnumerable<VagaDto>>(await _VagaService.GetAllAsync());
-                return Ok(result);
+            {
+                var result = _mapper.Map<IEnumerable<VagaDto>>(await _vagaService.GetAllAsync());
+                return Ok(new
+                {
+                    items = result,
+                    hasNext = false
+                });
             }
             catch (Exception ex)
             {
@@ -40,7 +44,7 @@ namespace PowerATS.API.Controllers.v1
         {
             try
             {
-                var result = _mapper.Map<VagaDto>(await _VagaService.GetByIdAsync(id));
+                var result = _mapper.Map<VagaDto>(await _vagaService.GetByIdAsync(id));
                 return Ok(result);
             }
             catch (Exception ex)
@@ -55,7 +59,7 @@ namespace PowerATS.API.Controllers.v1
             try
             {
                 var entity = _mapper.Map<Vaga>(dto);
-                var result = await _VagaService.CreateAsync(entity);
+                var result = await _vagaService.CreateAsync(entity);
                 return Ok(result);
             }
             catch (Exception ex)
@@ -64,14 +68,21 @@ namespace PowerATS.API.Controllers.v1
             }
         }
 
-        [HttpPut]
-        public async Task<IActionResult> UpdateAsync([FromBody] VagaDto dto)
+        [HttpPut("{id:Guid}")]
+        public async Task<IActionResult> UpdateAsync(Guid id, [FromBody] VagaDto dto)
         {
             try
             {
-                var entity = _mapper.Map<Vaga>(dto);
-                var result = await _VagaService.UpdateAsync(entity);
-                return Ok(result);
+                var exists = await _vagaService.GetByIdAsync(id);
+
+                if (exists != null)
+                {
+                    var entity = _mapper.Map<Vaga>(dto);
+                    var result = await _vagaService.UpdateAsync(entity);
+                    return Ok(result);
+                }
+                else
+                    return NotFound($"Item {id} não existe.");
             }
             catch (Exception ex)
             {
@@ -84,7 +95,7 @@ namespace PowerATS.API.Controllers.v1
         {
             try
             {
-                var result = await _VagaService.DeleteByIdAsync(id);
+                var result = await _vagaService.DeleteByIdAsync(id);
                 return Ok(result);
             }
             catch (Exception ex)

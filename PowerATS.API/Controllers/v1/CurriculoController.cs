@@ -12,12 +12,12 @@ namespace PowerATS.API.Controllers.v1
     [ApiController]
     public class CurriculoController : ControllerBase
     {
-        private readonly ICurriculoService _CurriculoService;
+        private readonly ICurriculoService _curriculoService;
         private readonly IMapper _mapper;
 
-        public CurriculoController(ICurriculoService CurriculoService, IMapper mapper)
+        public CurriculoController(ICurriculoService curriculoService, IMapper mapper)
         {
-            _CurriculoService = CurriculoService;
+            _curriculoService = curriculoService;
             _mapper = mapper;
         }
 
@@ -26,8 +26,12 @@ namespace PowerATS.API.Controllers.v1
         {
             try
             { 
-                var result = _mapper.Map<IEnumerable<CurriculoDto>>(await _CurriculoService.GetAllAsync());
-                return Ok(result);
+                var result = _mapper.Map<IEnumerable<CurriculoDto>>(await _curriculoService.GetAllAsync());
+                return Ok(new
+                {
+                    items = result,
+                    hasNext = false
+                });
             }
             catch (Exception ex)
             {
@@ -40,7 +44,7 @@ namespace PowerATS.API.Controllers.v1
         {
             try
             {
-                var result = _mapper.Map<CurriculoDto>(await _CurriculoService.GetByIdAsync(id));
+                var result = _mapper.Map<CurriculoDto>(await _curriculoService.GetByIdAsync(id));
                 return Ok(result);
             }
             catch (Exception ex)
@@ -55,7 +59,7 @@ namespace PowerATS.API.Controllers.v1
             try
             {
                 var entity = _mapper.Map<Curriculo>(dto);
-                var result = await _CurriculoService.CreateAsync(entity);
+                var result = await _curriculoService.CreateAsync(entity);
                 return Ok(result);
             }
             catch (Exception ex)
@@ -64,14 +68,21 @@ namespace PowerATS.API.Controllers.v1
             }
         }
 
-        [HttpPut]
-        public async Task<IActionResult> UpdateAsync([FromBody] CurriculoDto dto)
+        [HttpPut("{id:Guid}")]
+        public async Task<IActionResult> UpdateAsync(Guid id, [FromBody] CurriculoDto dto)
         {
             try
             {
-                var entity = _mapper.Map<Curriculo>(dto);
-                var result = await _CurriculoService.UpdateAsync(entity);
-                return Ok(result);
+                var exists = await _curriculoService.GetByIdAsync(id);
+
+                if (exists != null)
+                {
+                    var entity = _mapper.Map<Curriculo>(dto);
+                    var result = await _curriculoService.UpdateAsync(entity);
+                    return Ok(result);
+                }
+                else
+                    return NotFound($"Item {id} não existe.");
             }
             catch (Exception ex)
             {
@@ -84,7 +95,7 @@ namespace PowerATS.API.Controllers.v1
         {
             try
             {
-                var result = await _CurriculoService.DeleteByIdAsync(id);
+                var result = await _curriculoService.DeleteByIdAsync(id);
                 return Ok(result);
             }
             catch (Exception ex)

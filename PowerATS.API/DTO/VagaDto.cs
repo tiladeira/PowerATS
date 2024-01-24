@@ -17,11 +17,5 @@ namespace PowerATS.API.DTO
 
         [Required(ErrorMessage = "O campo {0} é obrigatório.")]
         public decimal Valor { get; set; }
-
-        [Required(ErrorMessage = "O campo {0} é obrigatório.")]
-        public EnumTipoContratacao TipoContratacao { get; set; }
-
-        [Required(ErrorMessage = "O campo {0} é obrigatório.")]
-        public bool Status { get; set; }
     }
 }

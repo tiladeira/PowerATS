@@ -1,4 +1,5 @@
 using PowerATS.Domain.Entities;
+using PowerATS.Domain.Enums;
 using PowerATS.Domain.Interfaces.Repositories;
 using PowerATS.Domain.Interfaces.Services;
 
@@ -19,6 +20,8 @@ namespace PowerATS.Domain.Services
             {
                 entity.IdVaga = Guid.NewGuid();
                 entity.id = Guid.NewGuid();
+                entity.TipoContratacao = EnumTipoContratacao.CLT;
+                entity.Status = true;
 
                 await _unitOfWork.Vaga.CreateAsync(entity);
                 var result = _unitOfWork.Commit();
@@ -75,6 +78,9 @@ namespace PowerATS.Domain.Services
         {
             if (entity != null)
             {
+                entity.TipoContratacao = EnumTipoContratacao.CLT;
+                entity.Status = true;
+
                 await _unitOfWork.Vaga.UpdateAsync(entity);
                 var result = _unitOfWork.Commit();
 
