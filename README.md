@@ -19,7 +19,12 @@ Projeto desenvolvido com as seguintes tecnologias e metodologias:
 
 Para configurar o ambiente logal, deve-se seguir os passos:
 
-Subir Docker do banco de dados que está na pasta DataBase.
+Subir Docker utilizando o comando abaixo para criar a base de dados:
+docker run -e 'ACCEPT_EULA=Y' -e "SA_PASSWORD=teste@ats!" -p 1433:1433 --name sqlserver -d mcr.microsoft.com/mssql/server:2019-latest
+
+No projeto, no package manager console, escolha o projeto Infra.Data e execute o comando update-database para atualizar a base de dados com as novas tabelas.
+
+Lembrando que o projeto vai ser criado vazio.
 
 3. Testar Projeto
 
