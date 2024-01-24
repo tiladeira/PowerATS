@@ -22,7 +22,7 @@ namespace PowerATS.Infra.Data.Repository.Base
 
         public async Task<TEntity> GetByIdAsync(Guid id)
         {
-            return await _appDbContext.Set<TEntity>().FindAsync(id);
+            return await _appDbContext.Set<TEntity>().AsNoTracking().FirstOrDefaultAsync(x => x.id == id);
         }
 
         public async Task CreateAsync(TEntity entity)
