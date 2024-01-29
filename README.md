@@ -12,24 +12,10 @@ Projeto desenvolvido com as seguintes tecnologias e metodologias:
 * API Rest;
 * Cleam Arch;
 * Docker;
-* SQL Server;
+* MongoDB;
 * Auto Mapper;
 
-2. Configurar Ambiente
-
-Para configurar o ambiente local, deve-se seguir os passos:
-
-* Faça o clone deste repositório a partir da branch master em seu dispositivo local;
-* Com o clone feito, vá até a pasta salva e abra o projeto no seu visual studio;
-* Abra uma nova janela do commando para subir Docker utilizando o comando abaixo para criar a base de dados (devemos ter o Docker Desktop Instalado):
-docker run -e 'ACCEPT_EULA=Y' -e "SA_PASSWORD=teste@ats!" -p 1433:1433 --name sqlserver -d mcr.microsoft.com/mssql/server:2019-latest
-* No projeto, no package manager console, escolha o projeto Infra.Data e execute o comando update-database para atualizar a base de dados com as novas tabelas.
-* Execute o projeto com F5 e as apis vão ser disponibilizadas via swagger;
-
-  
-Lembrando que o projeto vai ser criado vazio.
-
-3. Testar Projeto
+2. Testar Projeto
 
 Para realizar os teste das apis, foi criada a collection no Postman abaixo:
 
