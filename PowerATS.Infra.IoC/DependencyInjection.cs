@@ -1,11 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 using PowerATS.Domain.Interfaces.Repositories;
 using PowerATS.Domain.Interfaces.Services;
 using PowerATS.Domain.Services;
-using PowerATS.Infra.Data.Context;
+using PowerATS.Infra.Data.ContextMongoDB;
 using PowerATS.Infra.Data.Repository;
 using PowerATS.Infra.Data.UnitOfWork;
 
@@ -15,9 +14,7 @@ namespace PowerATS.Infra.IoC
     {
         public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddDbContext<AppDbContext>(options =>
-                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
-
+            services.AddScoped<IMongoContext, MongoContext>();
             services.AddScoped<IUnitOfWorkRepository, UnitOfWorkRepository>();
             services.AddScoped<ICandidatoRepository, CandidatoRepository>();
             services.AddScoped<ICandidatoVagaRepository, CandidatoVagaRepository>();

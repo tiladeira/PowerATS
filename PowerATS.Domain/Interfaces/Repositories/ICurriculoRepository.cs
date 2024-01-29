@@ -3,7 +3,7 @@ using PowerATS.Domain.Interfaces.Base;
 
 namespace PowerATS.Domain.Interfaces.Repositories
 {
-    public interface ICurriculoRepository : IRepositoryBase<Curriculo>
+    public interface ICurriculoRepository : IRepositoryBaseMongoDB<Curriculo>
     {
     }
 }

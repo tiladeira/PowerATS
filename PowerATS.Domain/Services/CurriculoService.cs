@@ -2,6 +2,8 @@ using PowerATS.Domain.Entities;
 using PowerATS.Domain.Interfaces.Repositories;
 using PowerATS.Domain.Interfaces.Services;
 
+using System.Linq.Expressions;
+
 namespace PowerATS.Domain.Services
 {
     public class CurriculoService : ICurriculoService
@@ -13,78 +15,34 @@ namespace PowerATS.Domain.Services
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<bool> CreateAsync(Curriculo entity)
+        public Task AddAsync(Curriculo entity)
         {
-            if (entity != null)
-            {
-                entity.IdCurriculo = Guid.NewGuid();
-                entity.id = Guid.NewGuid();
-
-                await _unitOfWork.Curriculo.CreateAsync(entity);
-                var result = _unitOfWork.Commit();
-
-                if (result > 0)
-                    return true;
-                else
-                    return false;
-            }
-
-            return false;
+            throw new NotImplementedException();
         }
 
-        public async Task<bool> DeleteByIdAsync(Guid id)
+        public Task DeleteAsync(string id)
         {
-            if (id != null)
-            {
-                var entity = await _unitOfWork.Curriculo.GetByIdAsync(id);
-
-                if (entity != null)
-                {
-                    await _unitOfWork.Curriculo.DeleteByAsync(entity).ConfigureAwait(false);
-                    var result = _unitOfWork.Commit();
-
-                    if (result > 0)
-                        return true;
-                    else
-                        return false;
-                }
-            }
-
-            return false;
+            throw new NotImplementedException();
         }
 
-        public async Task<IEnumerable<Curriculo>> GetAllAsync()
+        public Task<IEnumerable<Curriculo>> FindAsync(Expression<Func<Curriculo, bool>> expression)
         {
-            return await _unitOfWork.Curriculo.GetAllAsync();
+            throw new NotImplementedException();
         }
 
-        public async Task<Curriculo> GetByIdAsync(Guid id)
+        public Task<IEnumerable<Curriculo>> GetAllAsync()
         {
-            if (id != null)
-            {
-                var entity = await _unitOfWork.Curriculo.GetByIdAsync(id);
-
-                if (entity != null)
-                    return entity;
-            }
-
-            return null;
+            throw new NotImplementedException();
         }
 
-        public async Task<bool> UpdateAsync(Curriculo entity)
+        public Task<Curriculo> GetByIdAsync(string id)
         {
-            if (entity != null)
-            {
-                await _unitOfWork.Curriculo.UpdateAsync(entity);
-                var result = _unitOfWork.Commit();
+            throw new NotImplementedException();
+        }
 
-                if (result > 0)
-                    return true;
-                else
-                    return false;
-            }
-
-            return false;
+        public Task UpdateAsync(string id, Curriculo entity)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -1,6 +1,4 @@
-using Microsoft.EntityFrameworkCore;
-
-using PowerATS.Infra.Data.Context;
+using PowerATS.Infra.Data.ContextMongoDB;
 using PowerATS.Infra.IoC;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,13 +8,15 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddDbContext<AppDbContext>(options =>
-               options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddServices(builder.Configuration);    
-
 builder.Services.AddAutoMapper(typeof(Program).Assembly);
+
+var mongoDBSettings = builder.Configuration.GetSection("MongoDBSettings").Get<MongoDBSettings>();
+builder.Services.Configure<MongoDBSettings>(builder.Configuration.GetSection("MongoDBSettings"));
+
+builder.Services.AddDbContext<MongoContext>(options =>
+options.UseMongoDB(mongoDBSettings.URLMongoDB ?? "", mongoDBSettings.NomeBase ?? ""));
 
 var app = builder.Build();
 

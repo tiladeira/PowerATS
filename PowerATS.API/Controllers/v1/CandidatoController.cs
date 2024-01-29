@@ -59,7 +59,7 @@ namespace PowerATS.API.Controllers.v1
             try
             {
                 var entity = _mapper.Map<Candidato>(dto);
-                var result = await _candidatoService.CreateAsync(entity);
+                var result = await _candidatoService.AddAsync(entity);
                 return Ok(result);
             }
             catch (Exception ex)
@@ -78,7 +78,7 @@ namespace PowerATS.API.Controllers.v1
                 if (exists != null)
                 {
                     var entity = _mapper.Map<Candidato>(dto);
-                    var result = await _candidatoService.UpdateAsync(entity);
+                    var result = await _candidatoService.UpdateAsync(id, entity);
                     return Ok(result);
                 }
                 else
@@ -95,7 +95,7 @@ namespace PowerATS.API.Controllers.v1
         {
             try
             {
-                var result = await _candidatoService.DeleteByIdAsync(id);
+                var result = await _candidatoService.DeleteAsync(id);
                 return Ok(result);
             }
             catch (Exception ex)

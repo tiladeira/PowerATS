@@ -1,60 +1,26 @@
 ﻿using PowerATS.Domain.Interfaces.Repositories;
-using PowerATS.Infra.Data.Context;
 
 namespace PowerATS.Infra.Data.UnitOfWork
 {
     public class UnitOfWorkRepository : IUnitOfWorkRepository
     {
-        private readonly AppDbContext _dbContext;
+        private readonly IMongoContext _context;
 
-        public ICandidatoRepository Candidato { get; }
-        public ICandidatoVagaRepository CandidatoVaga { get; }
-        public ICurriculoRepository Curriculo { get; }
-        public IVagaRepository Vaga { get; }
-
-        public UnitOfWorkRepository(AppDbContext dbContext,
-                                    ICandidatoRepository candidato,
-                                    ICandidatoVagaRepository candidatoVaga,
-                                    ICurriculoRepository curriculo,
-                                    IVagaRepository vaga)
+        public UnitOfWorkRepository(IMongoContext context)
         {
-            _dbContext = dbContext;
-            Candidato = candidato;
-            CandidatoVaga = candidatoVaga;
-            Curriculo = curriculo;
-            Vaga = vaga;
+            _context = context;
         }
 
-        public int Commit()
+        public async Task<bool> Commit()
         {
-            return _dbContext.SaveChanges();
-        }
+            var changeAmount = await _context.SaveChanges();
 
-        public void Rollback()
-        {
-            _dbContext.Dispose();
-        }
-
-        public async Task CommitAsync()
-        {
-            await _dbContext.SaveChangesAsync();
-        }
-
-        public async Task RollbackAsync()
-        {
-            await _dbContext.DisposeAsync();
-        }
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (disposing)
-                _dbContext.Dispose();
+            return changeAmount > 0;
         }
 
         public void Dispose()
         {
-            Dispose(true);
-            GC.SuppressFinalize(this);
+            _context.Dispose();
         }
     }
 }

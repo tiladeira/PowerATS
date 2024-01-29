@@ -39,19 +39,19 @@ namespace PowerATS.API.Controllers.v1
             }
         }
 
-        [HttpGet("{id:Guid}")]
-        public async Task<IActionResult> GetByIdAsync(Guid id)
-        {
-            try
-            {
-                var result = _mapper.Map<VagaDto>(await _vagaService.GetByIdAsync(id));
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
-            }
-        }
+        //[HttpGet("{id:Guid}")]
+        //public async Task<IActionResult> GetByIdAsync(Guid id)
+        //{
+        //    try
+        //    {
+        //        var result = _mapper.Map<VagaDto>(await _vagaService.GetByIdAsync(id));
+        //        return Ok(result);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+        //    }
+        //}
 
         [HttpPost]
         public async Task<IActionResult> CreateAsync([FromBody] VagaDto dto)
@@ -59,8 +59,11 @@ namespace PowerATS.API.Controllers.v1
             try
             {
                 var entity = _mapper.Map<Vaga>(dto);
-                var result = await _vagaService.CreateAsync(entity);
-                return Ok(result);
+                await _vagaService.AddAsync(entity);
+
+                var entityAdd = await _vagaService.GetByIdAsync(entity.Id);
+
+                return Ok(entityAdd);
             }
             catch (Exception ex)
             {
@@ -68,40 +71,40 @@ namespace PowerATS.API.Controllers.v1
             }
         }
 
-        [HttpPut("{id:Guid}")]
-        public async Task<IActionResult> UpdateAsync(Guid id, [FromBody] VagaDto dto)
-        {
-            try
-            {
-                var exists = await _vagaService.GetByIdAsync(id);
+        //[HttpPut("{id:Guid}")]
+        //public async Task<IActionResult> UpdateAsync(Guid id, [FromBody] VagaDto dto)
+        //{
+        //    try
+        //    {
+        //        var exists = await _vagaService.GetByIdAsync(id);
 
-                if (exists != null)
-                {
-                    var entity = _mapper.Map<Vaga>(dto);
-                    var result = await _vagaService.UpdateAsync(entity);
-                    return Ok(result);
-                }
-                else
-                    return NotFound($"Item {id} não existe.");
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
-            }
-        }
+        //        if (exists != null)
+        //        {
+        //            var entity = _mapper.Map<Vaga>(dto);
+        //            var result = await _vagaService.UpdateAsync(entity);
+        //            return Ok(result);
+        //        }
+        //        else
+        //            return NotFound($"Item {id} não existe.");
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+        //    }
+        //}
 
-        [HttpDelete("{id:Guid}")]
-        public async Task<IActionResult> DeleteByIdAsync(Guid id)
-        {
-            try
-            {
-                var result = await _vagaService.DeleteByIdAsync(id);
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
-            }
-        }
+        //[HttpDelete("{id:Guid}")]
+        //public async Task<IActionResult> DeleteByIdAsync(Guid id)
+        //{
+        //    try
+        //    {
+        //        var result = await _vagaService.DeleteByIdAsync(id);
+        //        return Ok(result);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+        //    }
+        //}
     }
 }

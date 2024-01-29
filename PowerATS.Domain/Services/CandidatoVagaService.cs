@@ -2,6 +2,8 @@ using PowerATS.Domain.Entities;
 using PowerATS.Domain.Interfaces.Repositories;
 using PowerATS.Domain.Interfaces.Services;
 
+using System.Linq.Expressions;
+
 namespace PowerATS.Domain.Services
 {
     public class CandidatoVagaService : ICandidatoVagaService
@@ -13,78 +15,34 @@ namespace PowerATS.Domain.Services
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<bool> CreateAsync(CandidatoVaga entity)
+        public Task AddAsync(CandidatoVaga entity)
         {
-            if (entity != null)
-            {
-                entity.IdCandidatoVaga = Guid.NewGuid();
-                entity.id = Guid.NewGuid();
-
-                await _unitOfWork.CandidatoVaga.CreateAsync(entity);
-                var result = _unitOfWork.Commit();
-
-                if (result > 0)
-                    return true;
-                else
-                    return false;
-            }
-
-            return false;
+            throw new NotImplementedException();
         }
 
-        public async Task<bool> DeleteByIdAsync(Guid id)
+        public Task DeleteAsync(string id)
         {
-            if (id != null)
-            {
-                var entity = await _unitOfWork.CandidatoVaga.GetByIdAsync(id);
-
-                if (entity != null)
-                {
-                    await _unitOfWork.CandidatoVaga.DeleteByAsync(entity).ConfigureAwait(false);
-                    var result = _unitOfWork.Commit();
-
-                    if (result > 0)
-                        return true;
-                    else
-                        return false;
-                }
-            }
-
-            return false;
+            throw new NotImplementedException();
         }
 
-        public async Task<IEnumerable<CandidatoVaga>> GetAllAsync()
+        public Task<IEnumerable<CandidatoVaga>> FindAsync(Expression<Func<CandidatoVaga, bool>> expression)
         {
-            return await _unitOfWork.CandidatoVaga.GetAllAsync();
+            throw new NotImplementedException();
         }
 
-        public async Task<CandidatoVaga> GetByIdAsync(Guid id)
+        public Task<IEnumerable<CandidatoVaga>> GetAllAsync()
         {
-            if (id != null)
-            {
-                var entity = await _unitOfWork.CandidatoVaga.GetByIdAsync(id);
-
-                if (entity != null)
-                    return entity;
-            }
-
-            return null;
+            throw new NotImplementedException();
         }
 
-        public async Task<bool> UpdateAsync(CandidatoVaga entity)
+        public Task<CandidatoVaga> GetByIdAsync(string id)
         {
-            if (entity != null)
-            {
-                await _unitOfWork.CandidatoVaga.UpdateAsync(entity);
-                var result = _unitOfWork.Commit();
+            throw new NotImplementedException();
+        }
 
-                if (result > 0)
-                    return true;
-                else
-                    return false;
-            }
-
-            return false;
+        public Task UpdateAsync(string id, CandidatoVaga entity)
+        {
+            throw new NotImplementedException();
         }
     }
 }
