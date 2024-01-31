@@ -2,6 +2,6 @@
 {
     public class BaseEntity
     {
-        public Guid id { get; set; }
+        public string Id { get; set; }
     }
 }

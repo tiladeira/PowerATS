@@ -39,8 +39,8 @@ namespace PowerATS.API.Controllers.v1
             }
         }
 
-        [HttpGet("{id:Guid}")]
-        public async Task<IActionResult> GetByIdAsync(Guid id)
+        [HttpGet("{id:int}")]
+        public async Task<IActionResult> GetByIdAsync(string id)
         {
             try
             {
@@ -59,8 +59,8 @@ namespace PowerATS.API.Controllers.v1
             try
             {
                 var entity = _mapper.Map<Curriculo>(dto);
-                var result = await _curriculoService.CreateAsync(entity);
-                return Ok(result);
+                await _curriculoService.AddAsync(entity);
+                return Ok();
             }
             catch (Exception ex)
             {
@@ -68,8 +68,8 @@ namespace PowerATS.API.Controllers.v1
             }
         }
 
-        [HttpPut("{id:Guid}")]
-        public async Task<IActionResult> UpdateAsync(Guid id, [FromBody] CurriculoDto dto)
+        [HttpPut("id")]
+        public async Task<IActionResult> UpdateAsync(string id, [FromBody] CurriculoDto dto)
         {
             try
             {
@@ -78,8 +78,8 @@ namespace PowerATS.API.Controllers.v1
                 if (exists != null)
                 {
                     var entity = _mapper.Map<Curriculo>(dto);
-                    var result = await _curriculoService.UpdateAsync(entity);
-                    return Ok(result);
+                    await _curriculoService.UpdateAsync(id, entity);
+                    return Ok();
                 }
                 else
                     return NotFound($"Item {id} não existe.");
@@ -90,13 +90,13 @@ namespace PowerATS.API.Controllers.v1
             }
         }
 
-        [HttpDelete("{id:int}")]
-        public async Task<IActionResult> DeleteByIdAsync(Guid id)
+        [HttpDelete("id")]
+        public async Task<IActionResult> DeleteByIdAsync(string id)
         {
             try
             {
-                var result = await _curriculoService.DeleteByIdAsync(id);
-                return Ok(result);
+                await _curriculoService.DeleteAsync(id);
+                return Ok();
             }
             catch (Exception ex)
             {

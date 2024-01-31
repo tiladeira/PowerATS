@@ -1,18 +1,17 @@
-using PowerATS.Domain.Entities.Base;
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+using PowerATS.Domain.Entities.Base;
 
 namespace PowerATS.Domain.Entities
 {
     public class Curriculo : BaseEntity
     {
-        [Key]
-        public Guid IdCurriculo { get; set; }
-        public Guid IdCandidato { get; set; }
-        public string CurriculoDocumento { get; set; } = null!;
+        [BsonId]
+        [BsonRepresentation(BsonType.ObjectId)] public int idCurriculo { get; set; }
+        public int idCandidato { get; set; }
 
-        [ForeignKey("IdCandidato")]
-        public virtual Candidato IdCandidatoNavigation { get; set; } = null!;
+        [BsonElement("CurriculoDocumento")]
+        public string CurriculoDocumento { get; set; } = null!;
     }
 }

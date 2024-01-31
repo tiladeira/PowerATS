@@ -7,84 +7,43 @@ namespace PowerATS.Domain.Services
     public class CurriculoService : ICurriculoService
     {
         private readonly IUnitOfWorkRepository _unitOfWork;
+        private readonly ICurriculoRepository _curriduloRepository;
 
-        public CurriculoService(IUnitOfWorkRepository unitOfWork)
+        public CurriculoService(ICurriculoRepository curriduloRepository, IUnitOfWorkRepository unitOfWork)
         {
             _unitOfWork = unitOfWork;
+            _curriduloRepository = curriduloRepository;
         }
 
-        public async Task<bool> CreateAsync(Curriculo entity)
+        public async Task AddAsync(Curriculo entity)
         {
             if (entity != null)
             {
-                entity.IdCurriculo = Guid.NewGuid();
-                entity.id = Guid.NewGuid();
-
-                await _unitOfWork.Curriculo.CreateAsync(entity);
-                var result = _unitOfWork.Commit();
-
-                if (result > 0)
-                    return true;
-                else
-                    return false;
+                _curriduloRepository.Add(entity);
+                _unitOfWork.Commit();
             }
-
-            return false;
         }
 
-        public async Task<bool> DeleteByIdAsync(Guid id)
+        public async Task DeleteAsync(string id)
         {
-            if (id != null)
-            {
-                var entity = await _unitOfWork.Curriculo.GetByIdAsync(id);
-
-                if (entity != null)
-                {
-                    await _unitOfWork.Curriculo.DeleteByAsync(entity).ConfigureAwait(false);
-                    var result = _unitOfWork.Commit();
-
-                    if (result > 0)
-                        return true;
-                    else
-                        return false;
-                }
-            }
-
-            return false;
+            _curriduloRepository.Remove(id);
+            _unitOfWork.Commit();
         }
 
         public async Task<IEnumerable<Curriculo>> GetAllAsync()
         {
-            return await _unitOfWork.Curriculo.GetAllAsync();
+            return await _curriduloRepository.GetAll();
         }
 
-        public async Task<Curriculo> GetByIdAsync(Guid id)
+        public async Task<Curriculo> GetByIdAsync(string id)
         {
-            if (id != null)
-            {
-                var entity = await _unitOfWork.Curriculo.GetByIdAsync(id);
-
-                if (entity != null)
-                    return entity;
-            }
-
-            return null;
+            return await _curriduloRepository.GetById(id);
         }
 
-        public async Task<bool> UpdateAsync(Curriculo entity)
+        public async Task UpdateAsync(string id, Curriculo entity)
         {
-            if (entity != null)
-            {
-                await _unitOfWork.Curriculo.UpdateAsync(entity);
-                var result = _unitOfWork.Commit();
-
-                if (result > 0)
-                    return true;
-                else
-                    return false;
-            }
-
-            return false;
+            _curriduloRepository.Update(entity);
+            _unitOfWork.Commit();
         }
     }
 }

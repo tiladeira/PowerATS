@@ -3,7 +3,7 @@ using PowerATS.Domain.Interfaces.Base;
 
 namespace PowerATS.Domain.Interfaces.Services
 {
-    public interface IVagaService : IServiceBase<Vaga>
+    public interface IVagaService : IServiceBaseMongoDB<Vaga>
     {
     }
 }

@@ -7,84 +7,43 @@ namespace PowerATS.Domain.Services
     public class CandidatoVagaService : ICandidatoVagaService
     {
         private readonly IUnitOfWorkRepository _unitOfWork;
+        private readonly ICandidatoVagaRepository _candidatoVagaRepository;
 
-        public CandidatoVagaService(IUnitOfWorkRepository unitOfWork)
+        public CandidatoVagaService(ICandidatoVagaRepository candidatoVagaRepository, IUnitOfWorkRepository unitOfWork)
         {
             _unitOfWork = unitOfWork;
+            _candidatoVagaRepository = candidatoVagaRepository;
         }
 
-        public async Task<bool> CreateAsync(CandidatoVaga entity)
+        public async Task AddAsync(CandidatoVaga entity)
         {
             if (entity != null)
             {
-                entity.IdCandidatoVaga = Guid.NewGuid();
-                entity.id = Guid.NewGuid();
-
-                await _unitOfWork.CandidatoVaga.CreateAsync(entity);
-                var result = _unitOfWork.Commit();
-
-                if (result > 0)
-                    return true;
-                else
-                    return false;
+                _candidatoVagaRepository.Add(entity);
+                _unitOfWork.Commit();
             }
-
-            return false;
         }
 
-        public async Task<bool> DeleteByIdAsync(Guid id)
+        public async Task DeleteAsync(string id)
         {
-            if (id != null)
-            {
-                var entity = await _unitOfWork.CandidatoVaga.GetByIdAsync(id);
-
-                if (entity != null)
-                {
-                    await _unitOfWork.CandidatoVaga.DeleteByAsync(entity).ConfigureAwait(false);
-                    var result = _unitOfWork.Commit();
-
-                    if (result > 0)
-                        return true;
-                    else
-                        return false;
-                }
-            }
-
-            return false;
+            _candidatoVagaRepository.Remove(id);
+            _unitOfWork.Commit();
         }
 
         public async Task<IEnumerable<CandidatoVaga>> GetAllAsync()
         {
-            return await _unitOfWork.CandidatoVaga.GetAllAsync();
+            return await _candidatoVagaRepository.GetAll();
         }
 
-        public async Task<CandidatoVaga> GetByIdAsync(Guid id)
+        public async Task<CandidatoVaga> GetByIdAsync(string id)
         {
-            if (id != null)
-            {
-                var entity = await _unitOfWork.CandidatoVaga.GetByIdAsync(id);
-
-                if (entity != null)
-                    return entity;
-            }
-
-            return null;
+            return await _candidatoVagaRepository.GetById(id);
         }
 
-        public async Task<bool> UpdateAsync(CandidatoVaga entity)
+        public async Task UpdateAsync(string id, CandidatoVaga entity)
         {
-            if (entity != null)
-            {
-                await _unitOfWork.CandidatoVaga.UpdateAsync(entity);
-                var result = _unitOfWork.Commit();
-
-                if (result > 0)
-                    return true;
-                else
-                    return false;
-            }
-
-            return false;
+            _candidatoVagaRepository.Update(entity);
+            _unitOfWork.Commit();
         }
     }
 }

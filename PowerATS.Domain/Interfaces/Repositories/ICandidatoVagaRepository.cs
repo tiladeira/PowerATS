@@ -3,7 +3,7 @@ using PowerATS.Domain.Interfaces.Base;
 
 namespace PowerATS.Domain.Interfaces.Repositories
 {
-    public interface ICandidatoVagaRepository : IRepositoryBase<CandidatoVaga>
+    public interface ICandidatoVagaRepository : IRepositoryBaseMongoDB<CandidatoVaga>
     {
     }
 }

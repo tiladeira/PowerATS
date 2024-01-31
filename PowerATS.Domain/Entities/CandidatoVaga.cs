@@ -1,7 +1,7 @@
-using PowerATS.Domain.Entities.Base;
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+using PowerATS.Domain.Entities.Base;
 
 namespace PowerATS.Domain.Entities
 {
@@ -9,16 +9,11 @@ namespace PowerATS.Domain.Entities
     {
         public CandidatoVaga() { }
 
-        [Key]
-        public Guid IdCandidatoVaga { get; set; }
-        public Guid IdCandidato { get; set; }
-        public Guid IdVaga { get; set; }
+        [BsonId]
+        [BsonRepresentation(BsonType.ObjectId)] public int idCandidatoVaga { get; set; }
+        public int idCandidato { get; set; }
 
-
-        [ForeignKey("IdCandidato")]
-        public virtual Candidato IdCandidatoNavigation { get; set; } = null!;
-
-        [ForeignKey("IdVaga")]
-        public virtual Vaga IdVagaNavigation { get; set; } = null!;
+        [BsonElement("IdVaga")]
+        public int idVaga { get; set; }
     }
 }

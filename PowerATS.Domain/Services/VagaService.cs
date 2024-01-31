@@ -1,5 +1,4 @@
 using PowerATS.Domain.Entities;
-using PowerATS.Domain.Enums;
 using PowerATS.Domain.Interfaces.Repositories;
 using PowerATS.Domain.Interfaces.Services;
 
@@ -8,89 +7,43 @@ namespace PowerATS.Domain.Services
     public class VagaService : IVagaService
     {
         private readonly IUnitOfWorkRepository _unitOfWork;
+        private readonly IVagaRepository _vagaRepository;
 
-        public VagaService(IUnitOfWorkRepository unitOfWork)
+        public VagaService(IVagaRepository vagaRepository, IUnitOfWorkRepository unitOfWork)
         {
+            _vagaRepository = vagaRepository;
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<bool> CreateAsync(Vaga entity)
+        public async Task AddAsync(Vaga entity)
         {
             if (entity != null)
             {
-                entity.IdVaga = Guid.NewGuid();
-                entity.id = Guid.NewGuid();
-                entity.TipoContratacao = EnumTipoContratacao.CLT;
-                entity.Status = true;
-
-                await _unitOfWork.Vaga.CreateAsync(entity);
-                var result = _unitOfWork.Commit();
-
-                if (result > 0)
-                    return true;
-                else
-                    return false;
+                _vagaRepository.Add(entity);
+                _unitOfWork.Commit();
             }
-
-            return false;
         }
 
-        public async Task<bool> DeleteByIdAsync(Guid id)
+        public async Task DeleteAsync(string id)
         {
-            if (id != null)
-            {
-                var entity = await _unitOfWork.Vaga.GetByIdAsync(id);
-
-                if (entity != null)
-                {
-                    await _unitOfWork.Vaga.DeleteByAsync(entity).ConfigureAwait(false);
-                    var result = _unitOfWork.Commit();
-
-                    if (result > 0)
-                        return true;
-                    else
-                        return false;
-                }
-            }
-
-            return false;
+            _vagaRepository.Remove(id);
+            _unitOfWork.Commit();
         }
 
         public async Task<IEnumerable<Vaga>> GetAllAsync()
         {
-            return await _unitOfWork.Vaga.GetAllAsync();
+            return await _vagaRepository.GetAll();
         }
 
-        public async Task<Vaga> GetByIdAsync(Guid id)
+        public async Task<Vaga> GetByIdAsync(string id)
         {
-            if (id != null)
-            {
-                var entity = await _unitOfWork.Vaga.GetByIdAsync(id);
-
-                if (entity != null)
-                    return entity;
-            }
-
-            return null;
+            return await _vagaRepository.GetById(id);
         }
 
-        public async Task<bool> UpdateAsync(Vaga entity)
+        public async Task UpdateAsync(string id, Vaga entity)
         {
-            if (entity != null)
-            {
-                entity.TipoContratacao = EnumTipoContratacao.CLT;
-                entity.Status = true;
-
-                await _unitOfWork.Vaga.UpdateAsync(entity);
-                var result = _unitOfWork.Commit();
-
-                if (result > 0)
-                    return true;
-                else
-                    return false;
-            }
-
-            return false;
+            _vagaRepository.Update(entity);
+            _unitOfWork.Commit();
         }
     }
 }

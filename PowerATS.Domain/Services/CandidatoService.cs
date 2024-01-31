@@ -7,84 +7,43 @@ namespace PowerATS.Domain.Services
     public class CandidatoService : ICandidatoService
     {
         private readonly IUnitOfWorkRepository _unitOfWork;
+        private readonly ICandidatoRepository _candidatoRepository;
 
-        public CandidatoService(IUnitOfWorkRepository unitOfWork)
+        public CandidatoService(ICandidatoRepository candidatoRepository, IUnitOfWorkRepository unitOfWork)
         {
             _unitOfWork = unitOfWork;
+            _candidatoRepository = candidatoRepository;
         }
 
-        public async Task<bool> CreateAsync(Candidato entity)
+        public async Task AddAsync(Candidato entity)
         {
             if (entity != null)
             {
-                entity.IdCandidato = Guid.NewGuid();
-                entity.id = Guid.NewGuid();
-
-                await _unitOfWork.Candidato.CreateAsync(entity);
-                var result = _unitOfWork.Commit();
-
-                if (result > 0)
-                    return true;
-                else
-                    return false;
+                _candidatoRepository.Add(entity);
+                _unitOfWork.Commit();
             }
-
-            return false;
         }
 
-        public async Task<bool> DeleteByIdAsync(Guid id)
+        public async Task DeleteAsync(string id)
         {
-            if (id != null)
-            {
-                var entity = await _unitOfWork.Candidato.GetByIdAsync(id);
-
-                if (entity != null)
-                {
-                    await _unitOfWork.Candidato.DeleteByAsync(entity).ConfigureAwait(false);
-                    var result = _unitOfWork.Commit();
-
-                    if (result > 0)
-                        return true;
-                    else
-                        return false;
-                }
-            }
-
-            return false;
+            _candidatoRepository.Remove(id);
+            _unitOfWork.Commit();
         }
 
         public async Task<IEnumerable<Candidato>> GetAllAsync()
         {
-            return await _unitOfWork.Candidato.GetAllAsync();
+            return await _candidatoRepository.GetAll();
         }
 
-        public async Task<Candidato> GetByIdAsync(Guid id)
+        public async Task<Candidato> GetByIdAsync(string id)
         {
-            if (id != null)
-            {
-                var entity = await _unitOfWork.Candidato.GetByIdAsync(id);
-
-                if (entity != null)
-                    return entity;
-            }
-
-            return null;
+            return await _candidatoRepository.GetById(id);
         }
 
-        public async Task<bool> UpdateAsync(Candidato entity)
+        public async Task UpdateAsync(string id, Candidato entity)
         {
-            if (entity != null)
-            {
-                await _unitOfWork.Candidato.UpdateAsync(entity);
-                var result = _unitOfWork.Commit();
-
-                if (result > 0)
-                    return true;
-                else
-                    return false;
-            }
-
-            return false;
+            _candidatoRepository.Update(entity);
+            _unitOfWork.Commit();
         }
     }
 }
