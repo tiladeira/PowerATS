@@ -1,9 +1,6 @@
 using PowerATS.Domain.Entities;
-using PowerATS.Domain.Enums;
 using PowerATS.Domain.Interfaces.Repositories;
 using PowerATS.Domain.Interfaces.Services;
-
-using System.Linq.Expressions;
 
 namespace PowerATS.Domain.Services
 {
@@ -22,19 +19,15 @@ namespace PowerATS.Domain.Services
         {
             if (entity != null)
             {
-                 _vagaRepository.Add(entity);
+                _vagaRepository.Add(entity);
                 _unitOfWork.Commit();
             }
         }
 
-        public Task DeleteAsync(string id)
+        public async Task DeleteAsync(string id)
         {
-            throw new NotImplementedException();
-        }
-
-        public Task<IEnumerable<Vaga>> FindAsync(Expression<Func<Vaga, bool>> expression)
-        {
-            throw new NotImplementedException();
+            _vagaRepository.Remove(id);
+            _unitOfWork.Commit();
         }
 
         public async Task<IEnumerable<Vaga>> GetAllAsync()
@@ -42,14 +35,15 @@ namespace PowerATS.Domain.Services
             return await _vagaRepository.GetAll();
         }
 
-        public Task<Vaga> GetByIdAsync(string id)
+        public async Task<Vaga> GetByIdAsync(string id)
         {
-            throw new NotImplementedException();
+            return await _vagaRepository.GetById(id);
         }
 
-        public Task UpdateAsync(string id, Vaga entity)
+        public async Task UpdateAsync(string id, Vaga entity)
         {
-            throw new NotImplementedException();
+            _vagaRepository.Update(entity);
+            _unitOfWork.Commit();
         }
     }
 }

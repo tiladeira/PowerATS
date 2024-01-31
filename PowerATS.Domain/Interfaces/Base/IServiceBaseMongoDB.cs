@@ -6,7 +6,6 @@ namespace PowerATS.Domain.Interfaces.Base
     {
         Task<IEnumerable<T>> GetAllAsync();
         Task<T> GetByIdAsync(string id);
-        Task<IEnumerable<T>> FindAsync(Expression<Func<T, bool>> expression);
         Task AddAsync(T entity);
         Task UpdateAsync(string id, T entity);
         Task DeleteAsync(string id);

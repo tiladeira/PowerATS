@@ -2,47 +2,48 @@ using PowerATS.Domain.Entities;
 using PowerATS.Domain.Interfaces.Repositories;
 using PowerATS.Domain.Interfaces.Services;
 
-using System.Linq.Expressions;
-
 namespace PowerATS.Domain.Services
 {
     public class CurriculoService : ICurriculoService
     {
         private readonly IUnitOfWorkRepository _unitOfWork;
+        private readonly ICurriculoRepository _curriduloRepository;
 
-        public CurriculoService(IUnitOfWorkRepository unitOfWork)
+        public CurriculoService(ICurriculoRepository curriduloRepository, IUnitOfWorkRepository unitOfWork)
         {
             _unitOfWork = unitOfWork;
+            _curriduloRepository = curriduloRepository;
         }
 
-        public Task AddAsync(Curriculo entity)
+        public async Task AddAsync(Curriculo entity)
         {
-            throw new NotImplementedException();
+            if (entity != null)
+            {
+                _curriduloRepository.Add(entity);
+                _unitOfWork.Commit();
+            }
         }
 
-        public Task DeleteAsync(string id)
+        public async Task DeleteAsync(string id)
         {
-            throw new NotImplementedException();
+            _curriduloRepository.Remove(id);
+            _unitOfWork.Commit();
         }
 
-        public Task<IEnumerable<Curriculo>> FindAsync(Expression<Func<Curriculo, bool>> expression)
+        public async Task<IEnumerable<Curriculo>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            return await _curriduloRepository.GetAll();
         }
 
-        public Task<IEnumerable<Curriculo>> GetAllAsync()
+        public async Task<Curriculo> GetByIdAsync(string id)
         {
-            throw new NotImplementedException();
+            return await _curriduloRepository.GetById(id);
         }
 
-        public Task<Curriculo> GetByIdAsync(string id)
+        public async Task UpdateAsync(string id, Curriculo entity)
         {
-            throw new NotImplementedException();
-        }
-
-        public Task UpdateAsync(string id, Curriculo entity)
-        {
-            throw new NotImplementedException();
+            _curriduloRepository.Update(entity);
+            _unitOfWork.Commit();
         }
     }
 }

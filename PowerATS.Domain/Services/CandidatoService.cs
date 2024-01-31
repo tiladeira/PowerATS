@@ -2,47 +2,48 @@ using PowerATS.Domain.Entities;
 using PowerATS.Domain.Interfaces.Repositories;
 using PowerATS.Domain.Interfaces.Services;
 
-using System.Linq.Expressions;
-
 namespace PowerATS.Domain.Services
 {
     public class CandidatoService : ICandidatoService
     {
         private readonly IUnitOfWorkRepository _unitOfWork;
+        private readonly ICandidatoRepository _candidatoRepository;
 
-        public CandidatoService(IUnitOfWorkRepository unitOfWork)
+        public CandidatoService(ICandidatoRepository candidatoRepository, IUnitOfWorkRepository unitOfWork)
         {
             _unitOfWork = unitOfWork;
+            _candidatoRepository = candidatoRepository;
         }
 
-        public Task AddAsync(Candidato entity)
+        public async Task AddAsync(Candidato entity)
         {
-            throw new NotImplementedException();
+            if (entity != null)
+            {
+                _candidatoRepository.Add(entity);
+                _unitOfWork.Commit();
+            }
         }
 
-        public Task DeleteAsync(string id)
+        public async Task DeleteAsync(string id)
         {
-            throw new NotImplementedException();
+            _candidatoRepository.Remove(id);
+            _unitOfWork.Commit();
         }
 
-        public Task<IEnumerable<Candidato>> FindAsync(Expression<Func<Candidato, bool>> expression)
+        public async Task<IEnumerable<Candidato>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            return await _candidatoRepository.GetAll();
         }
 
-        public Task<IEnumerable<Candidato>> GetAllAsync()
+        public async Task<Candidato> GetByIdAsync(string id)
         {
-            throw new NotImplementedException();
+            return await _candidatoRepository.GetById(id);
         }
 
-        public Task<Candidato> GetByIdAsync(string id)
+        public async Task UpdateAsync(string id, Candidato entity)
         {
-            throw new NotImplementedException();
-        }
-
-        public Task UpdateAsync(string id, Candidato entity)
-        {
-            throw new NotImplementedException();
+            _candidatoRepository.Update(entity);
+            _unitOfWork.Commit();
         }
     }
 }

@@ -2,47 +2,48 @@ using PowerATS.Domain.Entities;
 using PowerATS.Domain.Interfaces.Repositories;
 using PowerATS.Domain.Interfaces.Services;
 
-using System.Linq.Expressions;
-
 namespace PowerATS.Domain.Services
 {
     public class CandidatoVagaService : ICandidatoVagaService
     {
         private readonly IUnitOfWorkRepository _unitOfWork;
+        private readonly ICandidatoVagaRepository _candidatoVagaRepository;
 
-        public CandidatoVagaService(IUnitOfWorkRepository unitOfWork)
+        public CandidatoVagaService(ICandidatoVagaRepository candidatoVagaRepository, IUnitOfWorkRepository unitOfWork)
         {
             _unitOfWork = unitOfWork;
+            _candidatoVagaRepository = candidatoVagaRepository;
         }
 
-        public Task AddAsync(CandidatoVaga entity)
+        public async Task AddAsync(CandidatoVaga entity)
         {
-            throw new NotImplementedException();
+            if (entity != null)
+            {
+                _candidatoVagaRepository.Add(entity);
+                _unitOfWork.Commit();
+            }
         }
 
-        public Task DeleteAsync(string id)
+        public async Task DeleteAsync(string id)
         {
-            throw new NotImplementedException();
+            _candidatoVagaRepository.Remove(id);
+            _unitOfWork.Commit();
         }
 
-        public Task<IEnumerable<CandidatoVaga>> FindAsync(Expression<Func<CandidatoVaga, bool>> expression)
+        public async Task<IEnumerable<CandidatoVaga>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            return await _candidatoVagaRepository.GetAll();
         }
 
-        public Task<IEnumerable<CandidatoVaga>> GetAllAsync()
+        public async Task<CandidatoVaga> GetByIdAsync(string id)
         {
-            throw new NotImplementedException();
+            return await _candidatoVagaRepository.GetById(id);
         }
 
-        public Task<CandidatoVaga> GetByIdAsync(string id)
+        public async Task UpdateAsync(string id, CandidatoVaga entity)
         {
-            throw new NotImplementedException();
-        }
-
-        public Task UpdateAsync(string id, CandidatoVaga entity)
-        {
-            throw new NotImplementedException();
+            _candidatoVagaRepository.Update(entity);
+            _unitOfWork.Commit();
         }
     }
 }
