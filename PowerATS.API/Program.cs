@@ -1,8 +1,5 @@
-using Microsoft.Extensions.Options;
-
 using MongoDB.Driver;
 
-using PowerATS.Domain.Services;
 using PowerATS.Infra.Data.ContextMongoDB;
 using PowerATS.Infra.IoC;
 
@@ -13,7 +10,12 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.Configure<MongoDBSettings>(builder.Configuration.GetSection("MongoDBSettings"));
+builder.Services.Configure<MongoDBSettings>(
+                builder.Configuration.GetSection(nameof(MongoDBSettings)));
+
+builder.Services.AddSingleton<IMongoClient>(s =>
+        new MongoClient(builder.Configuration.GetValue<string>("MongoDBSettings:Connection")));
+
 
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddServices(builder.Configuration);    

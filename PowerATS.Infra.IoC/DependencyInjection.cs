@@ -17,17 +17,13 @@ namespace PowerATS.Infra.IoC
     {
         public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
-
-            services.AddDbContext<MongoContext>(options =>
-                options.UseSqlServer(configuration.GetConnectionString("MongoDBSettings")));
-
             //services.AddTransient<IMongoContext, MongoContext>();
 
-            //services.AddTransient<IUnitOfWorkRepository, UnitOfWorkRepository>();
-            //services.AddTransient<ICandidatoRepository, CandidatoRepository>();
-            //services.AddTransient<ICandidatoVagaRepository, CandidatoVagaRepository>();
-            //services.AddTransient<ICurriculoRepository, CurriculoRepository>();
-            //services.AddTransient<IVagaRepository, VagaRepository>();
+            services.AddTransient<IUnitOfWorkRepository, UnitOfWorkRepository>();
+            services.AddTransient<ICandidatoRepository, CandidatoRepository>();
+            services.AddTransient<ICandidatoVagaRepository, CandidatoVagaRepository>();
+            services.AddTransient<ICurriculoRepository, CurriculoRepository>();
+            services.AddTransient<IVagaRepository, VagaRepository>();
 
             return services;
         }
@@ -35,9 +31,9 @@ namespace PowerATS.Infra.IoC
         public static IServiceCollection AddServices(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddScoped<ICandidatoService, CandidatoService>();
-            //services.AddTransient<ICandidatoVagaService, CandidatoVagaService>();
-            //services.AddTransient<ICurriculoService, CurriculoService>();
-            //services.AddTransient<IVagaService, VagaService>();
+            services.AddTransient<ICandidatoVagaService, CandidatoVagaService>();
+            services.AddTransient<ICurriculoService, CurriculoService>();
+            services.AddTransient<IVagaService, VagaService>();
 
             return services;
         }
