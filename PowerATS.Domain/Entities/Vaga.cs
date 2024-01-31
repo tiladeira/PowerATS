@@ -10,7 +10,7 @@ namespace PowerATS.Domain.Entities
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
-        public Guid IdVaga { get; set; }
+        public int idVaga { get; set; }
 
         [BsonElement("Titulo")]
         public string Titulo { get; set; } = null!;

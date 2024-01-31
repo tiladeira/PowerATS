@@ -11,7 +11,7 @@ namespace PowerATS.Domain.Entities
 
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)] 
-        public Guid IdCandidato { get; set; }
+        public int idCandidato { get; set; }
 
         [BsonElement("NomeCompleto")]
         public string NomeCompleto { get; set; } = null!;
@@ -21,5 +21,8 @@ namespace PowerATS.Domain.Entities
 
         [BsonElement("Idade")]
         public int Idade { get; set; }
+
+        public virtual ICollection<CandidatoVaga> CandidatoVagas { get; set; } = new List<CandidatoVaga>();
+        public virtual ICollection<Curriculo> Curriculos { get; set; } = new List<Curriculo>();
     }
 }

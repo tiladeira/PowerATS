@@ -21,7 +21,7 @@ namespace PowerATS.Infra.Data.Repository.Base
             context.AddCommand(() => _collection.InsertOneAsync(obj));
         }
 
-        public virtual async Task<T> GetById(Guid id)
+        public virtual async Task<T> GetById(int id)
         {
             var data = await _collection.FindAsync(Builders<T>.Filter.Eq("_id", id));
             return data.SingleOrDefault();
@@ -38,7 +38,7 @@ namespace PowerATS.Infra.Data.Repository.Base
             context.AddCommand(() => _collection.ReplaceOneAsync(Builders<T>.Filter.Eq("_id", obj.GetType()), obj));
         }
 
-        public virtual void Remove(Guid id)
+        public virtual void Remove(int id)
         {
             context.AddCommand(() => _collection.DeleteOneAsync(Builders<T>.Filter.Eq("_id", id)));
         }

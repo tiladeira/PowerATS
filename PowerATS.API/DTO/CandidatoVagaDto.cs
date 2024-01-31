@@ -4,13 +4,13 @@ namespace PowerATS.API.DTO
 {
     public class CandidatoVagaDto
     {
-        public Guid IdCandidatoVaga { get; set; }
-        public Guid id { get; set; }
+        public int idCandidatoVaga { get; set; }
+        public int id { get; set; }
 
         [Required(ErrorMessage = "O campo {0} é obrigatório.")]
-        public Guid IdCandidato { get; set; }
+        public int idCandidato { get; set; }
 
         [Required(ErrorMessage = "O campo {0} é obrigatório.")]
-        public Guid IdVaga { get; set; }
+        public int idVaga { get; set; }
     }
 }
